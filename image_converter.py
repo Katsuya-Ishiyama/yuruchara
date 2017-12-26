@@ -23,23 +23,49 @@ ENCODING = 'UTF-8'
 
 
 def get_src_image_path(character_type, filename):
+
+    """ Getting image filepath to be converted. """
+
     return os.path.join(WORK_DIR, character_type, 'src', 'image', filename)
 
 
 def get_src_data_path(character_type):
+
+    """ Getting data file path of including numbers of votes """
+
     return os.path.join(WORK_DIR, character_type, 'yuruchara.csv')
 
 
 def get_output_data_path(character_type):
+
+    """ Getting file path of resulting data """
+
     return os.path.join(WORK_DIR, character_type, '{}.json'.format(character_type))
 
 
 def check_gif(filename):
+
+    """ Checking whether GIF image. """
+
     extension = os.path.splitext(filename)[1]
     return (extension == '.gif')
 
 
 def make_json(character_type, data_num=None):
+
+    """ Converting data
+
+    This function makes images and corresponding numbers of votes
+    into 1 file as json.
+
+    Args:
+        character_type (str) : types of votes ranking.
+        data_num       (int) : number of images which will be converted.
+                               typically, to for testing learning.
+
+    Returns:
+        json data.
+    """
 
     train_image_list = []
     point_list = []
@@ -64,7 +90,7 @@ def make_json(character_type, data_num=None):
             train_image_list.append(training_image.tolist())
             point_list.append(record['point'])
 
-    return {'supervise': point_list, 'train': train_image_list}
+    return {'votes': point_list, 'images': train_image_list}
 
 
 if __name__ == '__main__':
