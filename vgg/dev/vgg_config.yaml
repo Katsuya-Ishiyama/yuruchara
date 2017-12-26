@@ -1,0 +1,5 @@
+filter:
+  height: 3
+  width: 3
+  stride: [1, 1, 1, 1]
+
