@@ -80,7 +80,8 @@ def make_json(character_type, data_num=None):
                 if read_line_num_exclude_header > data_num:
                     break
 
-            # gif画像はresizeできないのでスキップする
+            # GIF images will be skipped, because imread cannot handle GIF
+            # format.
             if check_gif(record['filename']):
                 continue
 
@@ -88,7 +89,14 @@ def make_json(character_type, data_num=None):
             cropped_image = src_image[CROP_POSITION_LEFT:CROP_POSITION_RIGHT, CROP_POSITION_UPPER:CROP_POSITION_BOTTOM, :]
             training_image = resize(image=cropped_image, output_shape=(RESIZE_HEIGHT, RESIZE_WIDTH))
             train_image_list.append(training_image.tolist())
-            point_list.append(record['point'])
+
+            # points will be read as string if it were not converted into
+            # integer.
+            point = int(record['point'])
+
+            # it is important to make int into list, bacause data loader in
+            # task.py must read response variables as (n, 1) shape tensor.
+            point_list.append([point])
 
     return {'votes': point_list, 'images': train_image_list}
 
